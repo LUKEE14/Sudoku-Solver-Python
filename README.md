@@ -1,100 +1,32 @@
-# Sudoku Solver-Python
- Developing a sudoku solver using Backtracking algorithm in python
+# Sudoku Solver
 
+This Python program is designed to solve Sudoku puzzles efficiently using the backtracking algorithm.
 
- grid = [
-[4,0,0,0,0,5,0,0,0],
-[0,0,0,0,0,0,1,9,8],
-[3,0,0,0,8,2,4,0,0],
-[0,0,0,1,0,0,0,8,0],
-[9,0,3,0,0,0,0,0,0],
-[0,0,0,0,3,0,6,7,0],
-[0,5,0,0,0,9,0,0,0],
-[0,0,0,2,0,0,9,0,7],
-[6,4,0,3,0,0,0,0,0]]
+## Requirements
 
-import pyautogui as pg
-import numpy as np
-import time
+Python 3.x
+PyAutoGUI library
 
-grid = []
+## Installation
 
-while True:
-    row = list(input("Row:"))
-    ints= []
+Clone this repository to your local machine.
+Install the required Python libraries using pip:
 
-    for n in row:
-        ints.append(int(n))
-    grid.append(ints)
+pip install pyautogui
 
-    if len(grid) == 9:
-        break
-    print('row' + str(len(grid)) + 'complete')
+## Running the Solver
 
+Input the Sudoku puzzle row-wise, with each row entered on a separate line. Use '0' to represent empty cells.
+Once the puzzle is entered, the solver will automatically start solving it.
+After solving, the program will display the solved Sudoku puzzle using PyAutoGUI.
+Press Enter to continue and solve more Sudoku puzzles if desired.
 
-time.sleep(1)
+## How it Works
 
+The Sudoku solver employs the backtracking algorithm to efficiently find the solution to a given puzzle. Here's how it works:
 
-def attainable(x,y,n):
-    #checks Rows
-    for i in range(0,9):  
-        if grid[i][x] == n and i != y:
-            return False
+The program takes input from the user, representing the Sudoku puzzle as a 9x9 grid. Empty cells are represented by '0'.
+The solver uses a recursive backtracking approach to fill in the empty cells of the grid. It systematically tries different numbers in each cell and backtracks when it encounters a conflict (i.e., a number cannot be placed in a certain position).
+To improve efficiency, the solver uses constraint propagation techniques such as checking for attainability in rows, columns, and 3x3 subgrids. It also employs techniques like Naked Singles and Hidden Singles to reduce the search space and speed up the solving process.
 
-    #checks Columns    
-    for i in range(0,9):
-        if grid[y][i] == n and i != x:
-            return False
-        
-    #checks for numbers in the box , no matter the position   
-    x0 = (x // 3) * 3
-    y0 = (x // 3) * 3
-    for x in range (x0, x0 + 3):
-        for v in range(y0, y0 + 3):
-            if grid[y][x] == n:
-                return False
-            
-    return True
-
-def Print(matrix):
-    final = []
-    str_fin = []
-    for i in range(9):
-        final.append(matrix[i])
-
-    for lists in final:
-        for num in lists:
-            str_fin.append(str(num))
-
-    counter = []
-
-    for num in str_fin:
-        pg.press(num)
-        pg.hotkey('right')
-        counter.append(num)
-        if len(counter)%9 == 0:
-            pg.hotkey('down')
-            pg.hotkey('left')
-            pg.hotkey('left')
-            pg.hotkey('left')
-            pg.hotkey('left')
-            pg.hotkey('left')
-            pg.hotkey('left')
-            pg.hotkey('left')
-            pg.hotkey('left') 
-            
-def solve():
-    global grid
-    for y in range(9):
-        for x in range(9):
-            if grid[y][x] == 0:
-                for n in range(1,10):
-                    if attainable(x,y,n):
-                        grid[y][x] = n
-                        solve()
-                        grid[y][x] = 0
-                return
-    print(grid)
-    input("More ?")
-
-solve()
+Once a solution is found, the solver displays the solved Sudoku puzzle using PyAutoGUI for visualization.
